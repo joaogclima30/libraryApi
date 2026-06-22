@@ -13,6 +13,9 @@ import java.util.UUID;
 public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     //Query method
+    /*Um método query (ou consulta) é uma instrução enviada a um banco de dados ou sistema de informações para buscar,
+    filtrar, alterar ou manipular dados. Ele traduz a sua necessidade em comandos lógicos que a máquina compreende e executa.
+     */
     //Mesma coisa que (select * from livro where id_autor = id)
     //List<Livro> findbyAutor(Autor autor);
 
