@@ -29,7 +29,7 @@ public class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setNome("Joao Gabriel ");
         autor.setNacionalidade("brasil");
-        autor.setData_nascimento(LocalDate.of(2007,8,26));
+        autor.setDataNascimento(LocalDate.of(2007,8,26));
 
         var autorSalvo = autorRepository.save(autor);
         System.out.println("Autor salvo com sucesso!");
@@ -76,7 +76,7 @@ public class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setNome("Madu");
         autor.setNacionalidade("Italiana");
-        autor.setData_nascimento(LocalDate.of(2010, 07, 10));
+        autor.setDataNascimento(LocalDate.of(2010, 07, 10));
 
         var livro = new Livro();
         livro.setPreco(BigDecimal.valueOf(99.99));
