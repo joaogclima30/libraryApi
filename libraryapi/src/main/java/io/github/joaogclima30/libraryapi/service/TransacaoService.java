@@ -25,8 +25,7 @@ public class TransacaoService {
     public void atualizacaoSemAtualizar(){
         var livro = livroRepository.findById
                 (UUID.fromString("bb5d8cd3-ee6a-4a50-84c3-2faae272cf45")).orElse(null);
-
-        livro.setDataPublicacao(LocalDate.of(2024,7,2));
+        livro .setDataPublicacao(LocalDate.of(2024,7,2));
 
         //N é preciso fazer um save no final pois o metodo é Transactional
         // livroRepository.save(livro);

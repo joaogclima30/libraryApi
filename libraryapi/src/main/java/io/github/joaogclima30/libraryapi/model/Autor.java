@@ -39,7 +39,7 @@ public class Autor {
     @OneToMany(mappedBy = "autor")
     private List<Livro> livros;
 
-    @CreatedDate//Toda vez que pessiste cria a data e a hora
+    @CreatedDate//Toda vez que perssiste cria a data e a hora
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 

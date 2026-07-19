@@ -1,4 +1,4 @@
-package io.github.joaogclima30.libraryapi.controller.dto.ErroDTO;
+package io.github.joaogclima30.libraryapi.controller.dtoAutor.ErroDTO;
 
 import org.springframework.http.HttpStatus;
 

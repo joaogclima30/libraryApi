@@ -1,15 +1,15 @@
 package io.github.joaogclima30.libraryapi.controller;
 
-import io.github.joaogclima30.libraryapi.controller.dto.ErroDTO.ErroResponse;
-import io.github.joaogclima30.libraryapi.controller.dto.autorDTO.AutorPesquisaDTO;
-import io.github.joaogclima30.libraryapi.controller.dto.autorDTO.AutorRequestDTO;
-import io.github.joaogclima30.libraryapi.controller.dto.autorDTO.AutorResponseDTO;
-import io.github.joaogclima30.libraryapi.exceptions.ExisteLivroParaAutor;
+import io.github.joaogclima30.libraryapi.controller.dtoAutor.ErroDTO.ErroResponse;
+import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorPesquisaDTO;
+import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorRequestDTO;
+import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorResponseDTO;
+import io.github.joaogclima30.libraryapi.controller.mappers.AutorMapper;
 import io.github.joaogclima30.libraryapi.exceptions.RegistroDuplicadoExceptions;
 import io.github.joaogclima30.libraryapi.model.Autor;
 import io.github.joaogclima30.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
-import org.apache.logging.log4j.spi.ObjectThreadContextMap;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,21 +23,23 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/autores")
+@RequiredArgsConstructor
 public class AutorController {
 
-    @Autowired
-    AutorService autorService;
+    private final AutorService autorService;
+    private final AutorMapper autorMapper;
+
 
     @PostMapping
     //Classe que representa uma resposta
-    public ResponseEntity salvar(@Valid @RequestBody AutorRequestDTO autor){
-            Autor autorEntidade = autor.mapearParaAutor();
-            autorService.Salvar(autorEntidade);
+    public ResponseEntity salvar(@Valid @RequestBody AutorRequestDTO dto){
+            Autor autor = autorMapper.toEntity(dto);
+            autorService.Salvar(autor);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(autorEntidade.getId())
+                    .buildAndExpand(autor.getId())
                     .toUri();
 
             return ResponseEntity.created(location).build();
@@ -49,7 +51,7 @@ public class AutorController {
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
         if(autorOptional.isPresent()){
             Autor autor = autorOptional.get();
-            AutorResponseDTO dto = new AutorResponseDTO(autor.getId(), autor.getNome(),autor.getDataNascimento(),autor.getNacionalidade());
+            AutorResponseDTO dto = autorMapper.toDTO(autor);
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.notFound().build();
@@ -75,15 +77,13 @@ public class AutorController {
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade",required = false) String nacionalidade){
 
-            List<Autor> resultado = autorService.pesquisa(nome, nacionalidade);
-            List<AutorPesquisaDTO> lista = resultado.stream().map(autor -> new AutorPesquisaDTO(
-                    autor.getNome(),
-                    autor.getNacionalidade())).collect(Collectors.toList());
+            List<Autor> resultado = autorService.pesquisaByExemple(nome, nacionalidade);
+            List<AutorPesquisaDTO> lista = resultado.stream().map(autorMapper::autorPesquisaToDTO).collect(Collectors.toList());
             return ResponseEntity.ok(lista);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable String id, @RequestBody AutorRequestDTO dto){
+    public ResponseEntity<Object> atualizar(@PathVariable String id, @Valid @RequestBody AutorRequestDTO dto){
        try{
            var idAutor = UUID.fromString(id);
            Optional<Autor> autorOptional = autorService.obterPorId(idAutor);

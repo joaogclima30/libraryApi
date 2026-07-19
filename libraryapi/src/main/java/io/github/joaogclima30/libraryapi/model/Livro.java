@@ -3,9 +3,13 @@ package io.github.joaogclima30.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -19,8 +23,6 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    //O cascade serve para Ligar toda vez que criar um livro criar um autor, um levando o outro
-    @ManyToOne(fetch = FetchType.LAZY)//(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_autor")
     private Autor autor;
 
@@ -39,4 +41,15 @@ public class Livro {
 
     @Column(name = "data_publicacao")
     private LocalDate dataPublicacao;
+
+    @CreatedDate//Toda vez que perssiste cria a data e a hora
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
 }

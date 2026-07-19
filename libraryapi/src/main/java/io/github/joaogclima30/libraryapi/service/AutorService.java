@@ -7,6 +7,8 @@ import io.github.joaogclima30.libraryapi.repository.AutorRepository;
 import io.github.joaogclima30.libraryapi.repository.LivroRepository;
 import io.github.joaogclima30.libraryapi.validator.AutorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,6 +63,22 @@ public class AutorService {
 
         return autorRepository.findAll();
     }
+
+    //Pesquisa Query de outra maneira
+    public List<Autor> pesquisaByExemple(String name, String nacionaliidade){
+        var autor = new Autor();
+        autor.setNome(name);
+        autor.setNacionalidade(nacionaliidade);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Autor> autorExample = Example.of(autor);
+        return autorRepository.findAll(autorExample);
+    }
+
 
     public boolean existeLivro(Autor autor){
         return livroRepository.existsByAutor(autor);
