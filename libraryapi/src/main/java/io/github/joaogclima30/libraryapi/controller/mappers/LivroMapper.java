@@ -11,10 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class LivroMapper {
 
     @Autowired
-    private AutorRepository autorRepository;
+    AutorRepository autorRepository;
 
     //Transforma o objeto Livro em uma entidade
-    @Mapping(target = "autor", expression = "java( autorRepository.findById(dto.idAutor()).orElse(null) )")
+    @Mapping(target = "autor", expression = "java( autorRepository.findById(dto.id_autor()).orElse(null) )")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "genero", ignore = true)
+    @Mapping(target = "dataCadastro", ignore = true)
+    @Mapping(target = "dataAtualizacao", ignore = true)
+    @Mapping(target = "idUsuario", ignore = true)
     public abstract Livro toEntity (LivroRequestDTO dto);
 
 

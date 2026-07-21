@@ -13,7 +13,6 @@ public class LivroService {
     private final LivroRepository livroRepository;
 
     public Livro salvar(Livro livro){
-
         return livroRepository.save(livro);
     }
 
