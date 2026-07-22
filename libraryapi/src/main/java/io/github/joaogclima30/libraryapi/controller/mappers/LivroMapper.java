@@ -19,6 +19,8 @@ public abstract class LivroMapper {
     @Mapping(target = "genero", source = "generoLivro")
     public abstract Livro toEntity (LivroRequestDTO dto);
 
+    @Mapping(target = "generoLivro", source = "genero")
+    @Mapping(target = "autorDto", source = "autor")
     public abstract LivroResponseDTO toDTO(Livro livro);
 
 }

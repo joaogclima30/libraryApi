@@ -50,4 +50,15 @@ public class LivroController {
                     return ResponseEntity.ok(dto);
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteLivro(@Valid @PathVariable("id") String id){
+        var idLivro = UUID.fromString(id);
+        Optional<Livro> livroOptional = livroService.obterPorId(idLivro);
+        livroService.deleteLivro(livroOptional.get());
+        if(livroOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
 }
