@@ -29,7 +29,7 @@ public class LivroRepositoryTest {
         var livro = new Livro();
 
         livro.setPreco(BigDecimal.valueOf(89.99));
-        livro.setTitulo("Banana de pijama");
+        livro.setTitulo("Banana");
         livro.setGenero(GeneroLivro.ROMANCE);
         livro.setDataPublicacao(LocalDate.of(2026, 02, 17));
         livro.setIsbn("AI QUE MEDINHO");
@@ -44,9 +44,8 @@ public class LivroRepositoryTest {
         autor.setData_nascimento(LocalDate.of(2007,8,26));
         */
 
-        Autor autor = autorRepository.findById(UUID.fromString("d71964a8-d976-4b86-971f-e98a3a2ca53a")).orElse(null);
-
-        livro.setAutor(autor);
+       // Autor autor = autorRepository.findById(UUID.fromString("d71964a8-d976-4b86-971f-e98a3a2ca53a")).orElse(null);
+        //livro.setAutor(autor);
         livroRepository.save(livro);
     }
 

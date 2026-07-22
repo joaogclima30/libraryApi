@@ -15,7 +15,7 @@ import java.util.UUID;
 public record LivroRequestDTO(@NotBlank(message = "Campo Obrigatorio") @ISBN String isbn,
                               @NotBlank(message = "Campo Obrigatorio") String titulo,
                               @NotNull(message = "Campo Obrigatorio") @Past(message = "N pode ser data Futura") LocalDate dataPublicacao,
-                              @NotNull GeneroLivro generoLivro,
+                              @NotNull(message = "Campo Obrigatorio") GeneroLivro generoLivro,
                               BigDecimal preco,
                               @NotNull(message = "Campo Obrigatorio") UUID id_autor){
 

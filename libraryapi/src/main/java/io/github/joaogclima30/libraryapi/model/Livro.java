@@ -24,6 +24,7 @@ public class Livro {
     private UUID id;
 
     @JoinColumn(name = "id_autor")
+    @ManyToOne
     private Autor autor;
 
     @Column(name = "preco", precision = 18, scale = 2)

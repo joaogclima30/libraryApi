@@ -1,6 +1,6 @@
 package io.github.joaogclima30.libraryapi.controller.dtoLivro;
 
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorRequestDTO;
+import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorResponseDTO;
 import io.github.joaogclima30.libraryapi.model.GeneroLivro;
 
 import java.math.BigDecimal;
@@ -13,5 +13,5 @@ public record LivroResponseDTO(UUID id,
                                LocalDate dataPublicacao,
                                GeneroLivro generoLivro,
                                BigDecimal preco,
-                               AutorRequestDTO autorDto) {
+                               AutorResponseDTO autorDto) {
 }

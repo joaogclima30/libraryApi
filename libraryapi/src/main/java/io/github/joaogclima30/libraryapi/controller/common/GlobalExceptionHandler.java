@@ -30,15 +30,28 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RegistroDuplicadoExceptions.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErroResponse handleRegistroDuplicadoException(RegistroDuplicadoExceptions e ){
-        System.out.println(e);
-        return ErroResponse.conflito("N é possivel registrar Autor Pois ja existe");
+        return new ErroResponse(HttpStatus.CONFLICT.value(),
+                "N é possivel adicionar autor duplicado",
+                List.of());
     }
 
     @ExceptionHandler(ExisteLivroParaAutor.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroResponse handleExisteLivroParaAutor(ExisteLivroParaAutor e){
-        System.out.println(e);
-        return ErroResponse.respostaPadrao("N é possivel apagar autor que tem livro");
+        return new ErroResponse(HttpStatus.BAD_REQUEST.value(),
+                "N é possivel deletar autor com livro",
+                List.of());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErroResponse handleErrosNaoTratados(RuntimeException e){
+        return new ErroResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),"Ocorreu um erro inesperado, favor entrar em contato",
+                List.of()
+        );
     }
 
 }
