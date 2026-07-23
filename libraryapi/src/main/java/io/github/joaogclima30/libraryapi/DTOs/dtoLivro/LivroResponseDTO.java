@@ -1,6 +1,6 @@
-package io.github.joaogclima30.libraryapi.controller.dtoLivro;
+package io.github.joaogclima30.libraryapi.DTOs.dtoLivro;
 
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorResponseDTO;
+import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorResponseDTO;
 import io.github.joaogclima30.libraryapi.model.GeneroLivro;
 
 import java.math.BigDecimal;

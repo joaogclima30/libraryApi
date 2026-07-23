@@ -1,4 +1,4 @@
-package io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO;
+package io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

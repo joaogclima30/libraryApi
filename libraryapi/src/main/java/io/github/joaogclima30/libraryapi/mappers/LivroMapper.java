@@ -1,7 +1,7 @@
-package io.github.joaogclima30.libraryapi.controller.mappers;
+package io.github.joaogclima30.libraryapi.mappers;
 
-import io.github.joaogclima30.libraryapi.controller.dtoLivro.LivroRequestDTO;
-import io.github.joaogclima30.libraryapi.controller.dtoLivro.LivroResponseDTO;
+import io.github.joaogclima30.libraryapi.DTOs.dtoLivro.LivroRequestDTO;
+import io.github.joaogclima30.libraryapi.DTOs.dtoLivro.LivroResponseDTO;
 import io.github.joaogclima30.libraryapi.model.Livro;
 import io.github.joaogclima30.libraryapi.repository.AutorRepository;
 import org.mapstruct.Mapper;

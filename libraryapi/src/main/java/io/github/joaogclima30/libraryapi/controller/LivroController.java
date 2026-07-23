@@ -1,17 +1,14 @@
 package io.github.joaogclima30.libraryapi.controller;
 
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.ErroDTO.ErroResponse;
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorResponseDTO;
-import io.github.joaogclima30.libraryapi.controller.dtoLivro.LivroRequestDTO;
-import io.github.joaogclima30.libraryapi.controller.dtoLivro.LivroResponseDTO;
-import io.github.joaogclima30.libraryapi.controller.mappers.LivroMapper;
-import io.github.joaogclima30.libraryapi.exceptions.RegistroDuplicadoExceptions;
-import io.github.joaogclima30.libraryapi.model.Autor;
+import io.github.joaogclima30.libraryapi.DTOs.dtoLivro.LivroRequestDTO;
+import io.github.joaogclima30.libraryapi.DTOs.dtoLivro.LivroResponseDTO;
+import io.github.joaogclima30.libraryapi.mappers.LivroMapper;
+import io.github.joaogclima30.libraryapi.model.GeneroLivro;
 import io.github.joaogclima30.libraryapi.model.Livro;
 import io.github.joaogclima30.libraryapi.service.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
+import org.hibernate.query.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -60,5 +58,38 @@ public class LivroController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> pesquisa(@RequestParam(value = "isbn", required = false) String isbn,
+                                           @RequestParam(value = "titulo", required = false) String titulo,
+                                           @RequestParam(value = "nomeAutor", required = false) String nomeAutor,
+                                           @RequestParam(value = "generoLivro", required = false) GeneroLivro generoLivro,
+                                           @RequestParam(value = "anoPublicacao", required = false) Integer anoPublicacao){
+        var resultado = livroService.pesquisa(isbn,titulo,nomeAutor,generoLivro,anoPublicacao);
+        var lista = resultado.
+                stream()
+                .map(livroMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> atualizar(@PathVariable ("id") String id, @Valid @RequestBody LivroRequestDTO dto){
+        return livroService.obterPorId(UUID.fromString(id))
+                .map(livro -> {
+                   Livro entidadeAux = livroMapper.toEntity(dto);
+                   livro.setDataPublicacao(entidadeAux.getDataPublicacao());
+                   livro.setIsbn(entidadeAux.getIsbn());
+                   livro.setGenero(entidadeAux.getGenero());
+                   livro.setTitulo(entidadeAux.getTitulo());
+                   livro.setAutor(entidadeAux.getAutor());
+                   livro.setPreco(entidadeAux.getPreco());
+
+                   livroService.atualizar(livro);
+
+                   return ResponseEntity.noContent().build();
+
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

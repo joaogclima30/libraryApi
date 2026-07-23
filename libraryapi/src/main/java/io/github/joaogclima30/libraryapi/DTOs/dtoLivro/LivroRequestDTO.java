@@ -1,4 +1,4 @@
-package io.github.joaogclima30.libraryapi.controller.dtoLivro;
+package io.github.joaogclima30.libraryapi.DTOs.dtoLivro;
 
 import io.github.joaogclima30.libraryapi.model.Autor;
 import io.github.joaogclima30.libraryapi.model.GeneroLivro;

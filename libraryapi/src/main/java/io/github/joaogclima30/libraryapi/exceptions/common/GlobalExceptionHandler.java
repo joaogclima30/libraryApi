@@ -1,7 +1,8 @@
-package io.github.joaogclima30.libraryapi.controller.common;
+package io.github.joaogclima30.libraryapi.exceptions.common;
 
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.ErroDTO.ErroCampo;
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.ErroDTO.ErroResponse;
+import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.ErroDTO.ErroCampo;
+import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.ErroDTO.ErroResponse;
+import io.github.joaogclima30.libraryapi.exceptions.CampoInvalidoException;
 import io.github.joaogclima30.libraryapi.exceptions.ExisteLivroParaAutor;
 import io.github.joaogclima30.libraryapi.exceptions.RegistroDuplicadoExceptions;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErroResponse handleRegistroDuplicadoException(RegistroDuplicadoExceptions e ){
         return new ErroResponse(HttpStatus.CONFLICT.value(),
-                "N é possivel adicionar autor duplicado",
+                e.getMessage(),
                 List.of());
     }
 
@@ -43,6 +44,13 @@ public class GlobalExceptionHandler {
         return new ErroResponse(HttpStatus.BAD_REQUEST.value(),
                 "N é possivel deletar autor com livro",
                 List.of());
+    }
+    @ExceptionHandler(CampoInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResponse handleCampoInvalidoException(CampoInvalidoException e){
+        return new ErroResponse(HttpStatus.UNPROCESSABLE_ENTITY.value()
+                , e.getMessage()
+                ,List.of(new ErroCampo(e.getCampo(), e.getMessage())));
     }
 
     @ExceptionHandler(RuntimeException.class)

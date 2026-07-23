@@ -1,16 +1,13 @@
 package io.github.joaogclima30.libraryapi.controller;
 
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.ErroDTO.ErroResponse;
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorPesquisaDTO;
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorRequestDTO;
-import io.github.joaogclima30.libraryapi.controller.dtoAutor.autorDTO.AutorResponseDTO;
-import io.github.joaogclima30.libraryapi.controller.mappers.AutorMapper;
-import io.github.joaogclima30.libraryapi.exceptions.RegistroDuplicadoExceptions;
+import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorPesquisaDTO;
+import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorRequestDTO;
+import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorResponseDTO;
+import io.github.joaogclima30.libraryapi.mappers.AutorMapper;
 import io.github.joaogclima30.libraryapi.model.Autor;
 import io.github.joaogclima30.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

@@ -4,22 +4,27 @@ package io.github.joaogclima30.libraryapi.repository;
 import io.github.joaogclima30.libraryapi.model.Autor;
 import io.github.joaogclima30.libraryapi.model.GeneroLivro;
 import io.github.joaogclima30.libraryapi.model.Livro;
+import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /*
 @see LivroRepositoryTest
  */
 @Repository
-public interface LivroRepository extends JpaRepository<Livro, UUID> {
+public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecificationExecutor<Livro> {
+
 
     //Query method
     /*Um método query (ou consulta) é uma instrução enviada a um banco de dados ou sistema de informações para buscar,
@@ -32,7 +37,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     //select * from livro where titulo = 'Como programar'
     List<Livro> findByTitulo(String titulo);
 
-    List<Livro> findByIsbn(String isbn);
+    Optional<Livro> findByIsbn(String isbn);
 
     //Vamos usar @Query, então pode colocar o nome que quiser
     @Query(" select l from Livro as l order by l.titulo ")
