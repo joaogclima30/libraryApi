@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,6 +28,7 @@ public class LivroController {
     private final LivroMapper livroMapper;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> cadastroLivro(@RequestBody @Valid LivroRequestDTO livroDto) {
         Livro livro = livroMapper.toEntity(livroDto);
         livroService.salvar(livro);
@@ -41,6 +43,7 @@ public class LivroController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<LivroResponseDTO> visualizarLivro(@PathVariable("id") String id) {
         return livroService.obterPorId(UUID.fromString(id))
                 .map(livro -> {
@@ -50,6 +53,7 @@ public class LivroController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> deleteLivro(@Valid @PathVariable("id") String id){
         var idLivro = UUID.fromString(id);
         Optional<Livro> livroOptional = livroService.obterPorId(idLivro);
@@ -61,6 +65,7 @@ public class LivroController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> pesquisa(@RequestParam(value = "isbn", required = false) String isbn,
                                            @RequestParam(value = "titulo", required = false) String titulo,
                                            @RequestParam(value = "nomeAutor", required = false) String nomeAutor,
@@ -75,6 +80,7 @@ public class LivroController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> atualizar(@PathVariable ("id") String id, @Valid @RequestBody LivroRequestDTO dto){
         return livroService.obterPorId(UUID.fromString(id))
                 .map(livro -> {

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -27,6 +29,9 @@ public class SecurityConfiguration {
                 })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize ->{
+
+                    /*Existe uma forma melhor de fazer usando @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+                     e colocando as regras de hasRole no proprio metodo*/
                     authorize.requestMatchers("/login").permitAll();
 
                     authorize.requestMatchers(HttpMethod.POST,"/autores/**").hasRole("ADMIN");
@@ -34,9 +39,8 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.PUT, "/autores/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.GET, "/autores/**").hasAnyRole("USER", "ADMIN");
                     authorize.requestMatchers("/livros/**").hasAnyRole("USER", "ADMIN");
-                    authorize.requestMatchers(HttpMethod.POST,"/usuario/**").permitAll();
 
-                    authorize.anyRequest().authenticated();
+                    //authorize.anyRequest().authenticated();
                 })
                 .build();
     }
