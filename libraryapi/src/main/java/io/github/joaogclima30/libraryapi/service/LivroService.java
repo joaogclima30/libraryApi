@@ -1,7 +1,9 @@
 package io.github.joaogclima30.libraryapi.service;
 
+import io.github.joaogclima30.libraryapi.Security.SecurityService;
 import io.github.joaogclima30.libraryapi.model.GeneroLivro;
 import io.github.joaogclima30.libraryapi.model.Livro;
+import io.github.joaogclima30.libraryapi.model.Usuario;
 import io.github.joaogclima30.libraryapi.repository.LivroRepository;
 import io.github.joaogclima30.libraryapi.repository.specs.LivroSpecs;
 import io.github.joaogclima30.libraryapi.validator.LivroValidator;
@@ -25,13 +27,14 @@ import static io.github.joaogclima30.libraryapi.repository.specs.LivroSpecs.nome
 @RequiredArgsConstructor
 public class LivroService {
 
-    @Autowired
-    private LivroRepository livroRepository;
-    @Autowired
-    private LivroValidator livroValidator;
+    private final LivroRepository livroRepository;
+    private final SecurityService securityService;
+    private final LivroValidator livroValidator;
 
     public Livro salvar(Livro livro){
         livroValidator.validar(livro);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        livro.setUsuario(usuario);
         return livroRepository.save(livro);
     }
 

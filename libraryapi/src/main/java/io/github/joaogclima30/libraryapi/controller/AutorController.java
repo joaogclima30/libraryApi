@@ -3,12 +3,18 @@ package io.github.joaogclima30.libraryapi.controller;
 import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorPesquisaDTO;
 import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorRequestDTO;
 import io.github.joaogclima30.libraryapi.DTOs.dtoAutor.autorDTO.AutorResponseDTO;
+import io.github.joaogclima30.libraryapi.Security.SecurityService;
 import io.github.joaogclima30.libraryapi.mappers.AutorMapper;
 import io.github.joaogclima30.libraryapi.model.Autor;
+import io.github.joaogclima30.libraryapi.model.Usuario;
 import io.github.joaogclima30.libraryapi.service.AutorService;
+import io.github.joaogclima30.libraryapi.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,9 +35,12 @@ public class AutorController {
 
     @PostMapping
     //Classe que representa uma resposta
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity salvar(@Valid @RequestBody AutorRequestDTO dto){
-            Autor autor = autorMapper.toEntity(dto);
-            autorService.Salvar(autor);
+
+        Autor autor = autorMapper.toEntity(dto);
+
+        autorService.Salvar(autor);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -43,6 +52,7 @@ public class AutorController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<AutorResponseDTO> obterDetalhes(@PathVariable("id") String id){
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
@@ -55,6 +65,7 @@ public class AutorController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Object> deletarAutor(@Valid @PathVariable("id") String id){
            var idAutor = UUID.fromString(id);
            Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
@@ -70,6 +81,7 @@ public class AutorController {
     //Pesquisa HTTP com filtro (Query search)
     //RequestParam serve pra pesquisas Query
     @GetMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<List<AutorPesquisaDTO>> pesquisaAutor(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade",required = false) String nacionalidade){
@@ -80,6 +92,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Object> atualizar(@PathVariable String id, @Valid @RequestBody AutorRequestDTO dto){
            var idAutor = UUID.fromString(id);
            Optional<Autor> autorOptional = autorService.obterPorId(idAutor);

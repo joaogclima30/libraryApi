@@ -1,8 +1,10 @@
 package io.github.joaogclima30.libraryapi.service;
 
+import io.github.joaogclima30.libraryapi.Security.SecurityService;
 import io.github.joaogclima30.libraryapi.exceptions.ExisteLivroParaAutor;
 import io.github.joaogclima30.libraryapi.model.Autor;
 import io.github.joaogclima30.libraryapi.model.Livro;
+import io.github.joaogclima30.libraryapi.model.Usuario;
 import io.github.joaogclima30.libraryapi.repository.AutorRepository;
 import io.github.joaogclima30.libraryapi.repository.LivroRepository;
 import io.github.joaogclima30.libraryapi.validator.AutorValidator;
@@ -27,9 +29,15 @@ public class AutorService {
     @Autowired
     private LivroRepository livroRepository;
 
+    @Autowired
+    private SecurityService securityService;
+
     //Metodo de salvamento
     public Autor Salvar(Autor autor){
         autorValidator.validar(autor);
+       //Serve para ver quem é o usuario que esta fazendo a requisição do metodo
+        Usuario usuario = securityService.obterUsuarioLogado();
+        autor.setIdUsuario(usuario.getId());
         return autorRepository.save(autor);
     }
     public Autor atualizar(Autor autor){

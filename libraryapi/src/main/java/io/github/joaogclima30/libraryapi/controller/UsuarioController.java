@@ -5,6 +5,7 @@ import io.github.joaogclima30.libraryapi.mappers.UsuarioMapper;
 import io.github.joaogclima30.libraryapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public void salvar (@RequestBody UsuarioDTO dto){
        var usuario = mapper.toEntity(dto);
        usuarioService.salvar(usuario);
